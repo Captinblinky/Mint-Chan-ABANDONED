@@ -1,54 +1,30 @@
-const { getFiles } = require("../util/functions");
+const { Events } = require("../Validation/EventNames");
+const { promisify } = require("util");
+const { glob } = require("glob");
+const PG = promisify(glob);
+const Ascii = require("ascii-table");
 
-module.exports = (bot, reload) => {
-    const { client } = bot;
+module.exports = async(client) => {
+        const Table = new Ascii("Events Loaded");
 
-    let events = getFiles("./events/", ".js");
+        (await PG(`${process.cwd()}/Events/*/*.js`)).map(async(file) => {
+                    const event = require(file);
 
-    if (events.length == 0) {
-        console.log("No events to load");
-    }
-
-    events.forEach((f, i) => {
-        if (reload) {
-            delete require.cache[require.resolve(`../events/${f}`)];
-        }
-        const event = require(`../events/${f}`);
-        client.events.set(event.name, event);
-
-        if (!reload) {
-            console.log(`${i + 1}. ${f} loaded`);
+                    if (!Events.includes(event.name) || !event.name) {
+                        const L = file.split("/");
+                        await Table.addRow(`${event.name || "MISSING"}`, `⛔ Uh Oh, An event name is invalid/missing: ${L[6] + `/` + L[7]}`);
+            return;
         }
 
-    });
-
-    if (!reload) {
-        initEvents(bot);
-    }
-}
-
-function triggerEventHandler(bot, event, ...args) {
-    const { client } = bot;
-
-    try {
-        if (client.events.has(event)) {
-            client.events.get(event).run(bot, ...args);
+        if(event.once){
+            client.once(event.name, (...args) => event.execute(...args, client));
         } else {
-            throw new Error(`Event ${event} does not exist`);
-        }
-    } catch (err) {
-        console.error(err);
-    }
-}
+            client.on(event.name, (...args) => event.execute(...args, client));
+        };
 
-function initEvents(bot) {
-    const { client } = bot;
-
-    client.on("ready", () => {
-        triggerEventHandler(bot, "ready");
+        await Table.addRow(event.name, "✔ Loaded Successfully!");
     });
 
-    client.on("messageCreate", (message) => {
-        triggerEventHandler(bot, "messageCreate", message);
-    });
+    console.log(Table.toString());
+
 }
