@@ -27,11 +27,15 @@ module.exports = {
                     type: "STRING",
                     required: true,
                     choices: [
-                        { name: "queue", value: "queue" },
-                        { name: "skip", value: "skip" },
-                        { name: "pause", value: "pause" },
-                        { name: "resume", value: "resume" },
-                        { name: "stop", value: "stop" },
+                        { name: "View Queue", value: "queue" },
+                        { name: "Skip Song", value: "skip" },
+                        { name: "Pause Song", value: "pause" },
+                        { name: "Resume Song", value: "resume" },
+                        { name: "Stop Music", value: "stop" },
+                        { name: "Shuffle Queue", value: "shuffle" },
+                        { name: "Toggle Autoplay Modes", value: "autoplay" },
+                        { name: "Add a Related Song", value: "relatedsong" },
+                        { name: "Toggle Repeat Mode", value: "repeat" }
                     ]
                 }]
             }
@@ -95,6 +99,26 @@ module.exports = {
                                     {
                                         await queue.resume(VoiceChannel);
                                         return interaction.reply({ content: "Music has been resumed" });
+                                    }
+                                case "shuffle":
+                                    {
+                                        await queue.shuffle(VoiceChannel);
+                                        return interaction.reply({ content: "Music has been shuffled" });
+                                    }
+                                case "autoplay":
+                                    {
+                                        let Mode = await queue.toggleAutoplay(VoiceChannel);
+                                        return interaction.reply({ content: `Autoplay Mode is set to: ${Mode ? "On" : "Off"}` });
+                                    }
+                                case "relatedsong":
+                                    {
+                                        await queue.addRelatedSong(VoiceChannel);
+                                        return interaction.reply({ content: "A related song has been added to the queue" });
+                                    }
+                                case "repeat":
+                                    {
+                                        let Mode2 = await client.distube.setRepeatMode(queue);
+                                        return interaction.reply({ content: `Repeat Mode is set to: ${Mode2 = Mode2 ? Mode2 == 2 ? "Queue" : "Song" : "Off"}` });
                                     }
                                 case "queue":
                                     {
