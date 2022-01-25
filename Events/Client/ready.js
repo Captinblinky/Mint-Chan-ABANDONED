@@ -11,7 +11,7 @@ module.exports = {
      */
     execute(client) {
         console.log("*Yawn~* Good Morning Senpai!~");
-        client.user.setActivity("humans die.", { type: "WATCHING" });
+        client.user.setActivity("my creator suffer.", { type: "WATCHING" });
 
         if (!Database) return;
         mongoose.connect(Database, {
