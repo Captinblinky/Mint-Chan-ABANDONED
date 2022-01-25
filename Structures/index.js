@@ -25,3 +25,5 @@ module.exports = client;
 });
 
 client.login(Token);
+
+//Just a test to make sure my bat script works
