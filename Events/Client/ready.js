@@ -1,6 +1,6 @@
 const { Client } = require("discord.js");
-
-
+const mongoose = require("mongoose");
+const { Database } = require("../../config.json");
 
 module.exports = {
     name: "ready",
@@ -10,7 +10,17 @@ module.exports = {
      * @param {Client} client 
      */
     execute(client) {
-        console.log("The client is now ready.");
+        console.log("*Yawn~* Good Morning Senpai!~");
         client.user.setActivity("humans die.", { type: "WATCHING" });
+
+        if (!Database) return;
+        mongoose.connect(Database, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }).then(() => {
+            console.log("I managed to connect to our databases senpai! :3");
+        }).catch((err) => {
+            console.log(err, "I couldn't find the database senpai :c");
+        })
     }
 }
