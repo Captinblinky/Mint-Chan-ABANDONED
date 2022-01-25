@@ -1,14 +1,12 @@
 const { Perms } = require("../Validation/Permissions");
 const { Client } = require("discord.js");
-const { promisify } = require("util");
-const { glob } = require("glob");
-const Ascii = require("ascii-table");
-const PG = promisify(glob);
+const { GuildID } = require("../config.json");
+
 
 /**
  * @param {Client} client
  */
-module.exports = async(client) => {
+module.exports = async(client, PG, Ascii) => {
     const Table = new Ascii("Commands Loaded");
 
     CommandsArray = [];
@@ -42,7 +40,7 @@ module.exports = async(client) => {
     //Permissions Check//
 
     client.on("ready", async() => {
-        const MainGuild = await client.guilds.cache.get("637383487783043072");
+        const MainGuild = await client.guilds.cache.get(GuildID);
 
         MainGuild.commands.set(CommandsArray).then(async(command) => {
             const Roles = (commandName) => {
