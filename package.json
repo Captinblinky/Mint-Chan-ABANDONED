@@ -1,5 +1,5 @@
 {
-    "name": "Mint-Chan",
+    "name": "mint-chan",
     "version": "0.0.1",
     "description": "",
     "main": "index.js",
@@ -9,7 +9,6 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "ascii-table": "^0.0.9",
         "discord.js": "^13.6.0",
         "glob": "^7.2.0"
     }
