@@ -9,13 +9,13 @@ module.exports = {
                 name: "play",
                 description: "Plays a song.",
                 type: "SUB_COMMAND",
-                options: [{ name: "query", description: "Provide a name or a url for the song", type: "STRING", required: true }]
+                options: [{ name: "query", description: "Gimmie a name or URL link for the song you want to play!", type: "STRING", required: true }]
             },
             {
                 name: "volume",
-                description: "Alters the volume",
+                description: "Volume Knob.",
                 type: "SUB_COMMAND",
-                options: [{ name: "percent", description: "10 = 10%", type: "NUMBER", required: true }]
+                options: [{ name: "percent", description: "Put any number between 1 and 100!", type: "NUMBER", required: true }]
             },
             {
                 name: "settings",
@@ -33,7 +33,7 @@ module.exports = {
                         { name: "Resume Song", value: "resume" },
                         { name: "Stop Music", value: "stop" },
                         { name: "Shuffle Queue", value: "shuffle" },
-                        { name: "Toggle Autoplay Modes", value: "autoplay" },
+                        { name: "Toggle Autoplay", value: "autoplay" },
                         { name: "Add a Related Song", value: "relatedsong" },
                         { name: "Toggle Repeat Mode", value: "repeat" }
                     ]
@@ -51,23 +51,23 @@ module.exports = {
             const VoiceChannel = member.voice.channel;
 
             if (!VoiceChannel)
-                return interaction.reply({ content: "You must be in a voice channel to be able to use the music commands.", ephemeral: true });
+                return interaction.reply({ content: "😒 You're not in a voice channel, baka! Do you feel stupid? Do you feel dumb? Maybe even a little ashamed?", ephemeral: true });
 
             if (guild.me.voice.channelId && VoiceChannel.id !== guild.me.voice.channelId)
-                return interaction.reply({ content: `I am already playing music in <#${guild.me.voice.channelId}>.`, ephemeral: true });
+                return interaction.reply({ content: `🙄 Wait your turn you dummy! I am already playing music in <#${guild.me.voice.channelId}>.`, ephemeral: true });
 
             try {
                 switch (options.getSubcommand()) {
                     case "play":
                         {
                             client.distube.play(VoiceChannel, options.getString("query"), { textChannel: channel, member: member });
-                            return interaction.reply({ content: "Request recieved." });
+                            return interaction.reply({ content: "Gotcha Paisen!" });
                         }
                     case "volume":
                         {
                             const Volume = options.getNumber("percent");
                             if (Volume > 100 || Volume < 1)
-                                return interaction.reply({ content: "You need to specify a number between 1 and 100" });
+                                return interaction.reply({ content: ">:c you need to put a number between 1 and 100 DUMMY!" });
 
                             client.distube.setVolume(VoiceChannel, Volume);
                             return interaction.reply({ content: `Volume has been set to \`${Volume}%\`` });
@@ -77,48 +77,48 @@ module.exports = {
                             const queue = await client.distube.getQueue(VoiceChannel);
 
                             if (!queue)
-                                return interaction.reply({ content: "There is no queue." });
+                                return interaction.reply({ content: "Theres nothin' in the queue right now silly~" });
 
                             switch (options.getString("options")) {
                                 case "skip":
                                     {
                                         await queue.skip(VoiceChannel);
-                                        return interaction.reply({ content: "Skipped the track" });
+                                        return interaction.reply({ content: "I agree, that last track was definitely worth skipping~" });
                                     }
                                 case "stop":
                                     {
                                         await queue.stop(VoiceChannel);
-                                        return interaction.reply({ content: "Music has been stopped" });
+                                        return interaction.reply({ content: "Thanks for listening to music with me!~" });
                                     }
                                 case "pause":
                                     {
                                         await queue.pause(VoiceChannel);
-                                        return interaction.reply({ content: "Music has been paused" });
+                                        return interaction.reply({ content: "Need to take a break? No worries senpai, I'll be here when you return!" });
                                     }
                                 case "resume":
                                     {
                                         await queue.resume(VoiceChannel);
-                                        return interaction.reply({ content: "Music has been resumed" });
+                                        return interaction.reply({ content: "Back so soon?! Alright lets restart these jams~" });
                                     }
                                 case "shuffle":
                                     {
                                         await queue.shuffle(VoiceChannel);
-                                        return interaction.reply({ content: "Music has been shuffled" });
+                                        return interaction.reply({ content: "Shuffling? Suflihnfg?" });
                                     }
                                 case "autoplay":
                                     {
                                         let Mode = await queue.toggleAutoplay(VoiceChannel);
-                                        return interaction.reply({ content: `Autoplay Mode is set to: ${Mode ? "On" : "Off"}` });
+                                        return interaction.reply({ content: `Gotcha! Autoplay: ${Mode ? "On" : "Off"}` });
                                     }
                                 case "relatedsong":
                                     {
                                         await queue.addRelatedSong(VoiceChannel);
-                                        return interaction.reply({ content: "A related song has been added to the queue" });
+                                        return interaction.reply({ content: "Oooooh, I think you're gonna like this one paisen!~" });
                                     }
                                 case "repeat":
                                     {
                                         let Mode2 = await client.distube.setRepeatMode(queue);
-                                        return interaction.reply({ content: `Repeat Mode is set to: ${Mode2 = Mode2 ? Mode2 == 2 ? "Queue" : "Song" : "Off"}` });
+                                        return interaction.reply({ content: `Okaaaay, Repeat mode is set to: ${Mode2 = Mode2 ? Mode2 == 2 ? "Queue" : "Song" : "Off"}` });
                                     }
                                 case "queue":
                                     {

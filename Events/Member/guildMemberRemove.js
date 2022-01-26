@@ -1,4 +1,5 @@
 const { MessageEmbed, WebhookClient, GuildMember, Message } = require("discord.js");
+const { WebhookID, WebhookToken } = require("../../Structures/config.json");
 
 module.exports = {
     name: "guildMemberRemove",
@@ -8,9 +9,9 @@ module.exports = {
      */
     execute(member) {
         const { user, guild } = member;
-        const Logger = new WebhookClient({
-            id: "935404000537374741",
-            token: "C8QyN4Ebtq_Q9aIPcpjsQ2DiFG7PfG2pH4iM95LsL-gsca5p8kMSXaBt_tbdVEZEthtK"
+        const Leaver = new WebhookClient({
+            id: WebhookID,
+            token: WebhookToken
         });
 
 
@@ -21,6 +22,6 @@ module.exports = {
             ${member} has left the server.\n
             Joined: <t:${parseInt(member.joinedTimestamp / 1000)}:R>\nLatest Member Count: **${guild.memberCount}**`)
 
-        Logger.send({ embeds: [Welcome] })
+        Leaver.send({ embeds: [Welcome] })
     }
 }
